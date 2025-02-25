@@ -1,0 +1,35 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/demo
+    username: postgres
+    password: postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/demo
+    user: postgres
+    password: postgres
+    repair-on-migrate: true
+  
+pekko:
+  name: "ClusterSystem"
+  actor:
+    provider: "cluster"
+    allow-java-serialization: "off"
+    warn-about-java-serializer-usage: "on"
+  remote:
+    artery:
+      canonical:
+        hostname: "localhost"
+        port: 2551
+  cluster:
+    name: "ClusterSystem"
+    seed-nodes:
+      - "pekko://ClusterSystem@host1:2551"
+      - "pekko://ClusterSystem@host2:2551"
+    downing-provider-class: "org.apache.pekko.cluster.sbr.SplitBrainResolverProvider"
+
+server:
+  port : 8081    
+
+
+  
+     
