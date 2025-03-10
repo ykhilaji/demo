@@ -1,4 +1,7 @@
+
 spring:
+  main:
+    allow-bean-definition-overriding: true
   r2dbc:
     url: r2dbc:postgresql://localhost:5432/demo
     username: postgres
@@ -10,25 +13,27 @@ spring:
     repair-on-migrate: true
   
 pekko:
-  name: "ClusterSystem"
+  name: "demo"
   actor:
     provider: "cluster"
     allow-java-serialization: "off"
-    warn-about-java-serializer-usage: "on"
+    warn-about-java-serializer-usage: "on"  
+  
   remote:
     artery:
       canonical:
-        hostname: "localhost"
+        hostname: "127.0.0.1"  # Changed from "localhost" to "127.0.0.1"
         port: 2551
   cluster:
     name: "ClusterSystem"
     seed-nodes:
-      - "pekko://ClusterSystem@host1:2551"
-      - "pekko://ClusterSystem@host2:2551"
+      - pekko://ClusterSystem@127.0.0.1:2551
+      - pekko://ClusterSystem@127.0.0.1:2552
+      - pekko://ClusterSystem@127.0.0.1:2553
     downing-provider-class: "org.apache.pekko.cluster.sbr.SplitBrainResolverProvider"
 
 server:
-  port : 8081    
+  port : 8081
 
 
   
