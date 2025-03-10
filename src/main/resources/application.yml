@@ -33,7 +33,7 @@ pekko:
     downing-provider-class: "org.apache.pekko.cluster.sbr.SplitBrainResolverProvider"
 
 server:
-  port : 8081
+  port : 8088
 
 
   

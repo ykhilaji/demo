@@ -23,6 +23,10 @@ public class StudentService {
     .delayElements(Duration.ofSeconds(1));
   }
 
+  public Flux<Student> all() {
+    return studentRepository.findAll();
+  }
+
   public Mono<Student> findById(Long id) {
     return studentRepository.findById(id);
   }

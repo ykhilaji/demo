@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.shipping.demo.realTime.task.model.TaskInfra;
+import com.shipping.demo.realTime.task.model.TaskModel;
+import com.shipping.demo.realTime.task.repository.TaskRepository;
 import com.shipping.demo.realTime.task.service.JobService;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +28,7 @@ import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.Optional;
 
-
+import reactor.core.publisher.Flux;
 
 @Component
 public class JobServiceImpl implements JobService {
@@ -38,12 +40,14 @@ public class JobServiceImpl implements JobService {
     private final Cluster cluster;
     private final ActorRef pubsub;
     private ActorRef rateLimiter;
+    private final TaskRepository taskRepository;
 
-    public JobServiceImpl(ActorSystem system, Materializer materializer) {
+    public JobServiceImpl(ActorSystem system, Materializer materializer, TaskRepository taskRepository) {
         this.system = system;
         this.materializer = materializer;
         this.cluster = Cluster.get(system);
         this.pubsub = DistributedPubSub.get(system).mediator();
+        this.taskRepository = taskRepository;
     }
 
     @PostConstruct
@@ -91,5 +95,10 @@ public class JobServiceImpl implements JobService {
         String topic = "jobs:" + task.getSid();
        // TaskComplete taskComplete = new TaskComplete(task);
         rateLimiter.tell(new Publish(topic, task), ActorRef.noSender());
+    }
+
+    @Override
+    public Flux<TaskModel> getTasks() {
+        return taskRepository.findAll();
     }
 }
