@@ -1,4 +1,4 @@
-package com.shipping.demo.realTime.task.mapper;
+package com.shipping.demo.realTime.task.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 

@@ -3,7 +3,7 @@ package com.shipping.demo.realTime.task.actor;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shipping.demo.realTime.task.model.TaskInfra;
+import com.shipping.demo.realTime.task.entity.TaskInfra;
 import com.shipping.demo.realTime.task.protocol.ActorProtocol;
 
 import org.apache.pekko.actor.AbstractLoggingActor;
@@ -68,7 +68,6 @@ public class PageActor extends AbstractLoggingActor {
         ActorRef mediator = DistributedPubSub.get(getContext().getSystem()).mediator();
         log().info("Subscribing to {}.", topic);
         mediator.tell(new Subscribe(topic, getSelf()), getSelf());
-
     }
 
 
@@ -98,7 +97,6 @@ public class PageActor extends AbstractLoggingActor {
                 })
                 .build();
     }
-
 
     public interface Command  extends ActorProtocol{}
     public record TaskComplete(TaskInfra tasks) implements Command {

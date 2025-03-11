@@ -1,4 +1,4 @@
-package com.shipping.demo.realTime.task.model;
+package com.shipping.demo.realTime.task.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

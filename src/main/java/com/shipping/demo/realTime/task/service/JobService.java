@@ -1,7 +1,7 @@
 package com.shipping.demo.realTime.task.service;
 
-import com.shipping.demo.realTime.task.model.TaskInfra;
-import com.shipping.demo.realTime.task.model.TaskModel;
+import com.shipping.demo.realTime.task.entity.TaskInfra;
+import com.shipping.demo.realTime.task.entity.TaskModel;
 
 import reactor.core.publisher.Flux;
 

@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shipping.demo.realTime.simple.service.GreetingService;
-import com.shipping.demo.realTime.task.model.TaskModel;
 import com.shipping.demo.student.service.StudentService;
 import com.shipping.demo.student.model.Student;
+import com.shipping.demo.realTime.task.entity.TaskModel;
 import com.shipping.demo.realTime.task.service.JobService;
 
 

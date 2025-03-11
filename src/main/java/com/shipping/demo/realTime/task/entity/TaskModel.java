@@ -1,4 +1,4 @@
-package com.shipping.demo.realTime.task.model;
+package com.shipping.demo.realTime.task.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -84,21 +84,9 @@ public class TaskModel implements Serializable {
     @JsonProperty("print_results")
     private JsonNode printResults;
 
-
-   // Définissez ici vos champs, constructeurs, getters et setters...
-
-    /**
-     * Convertit un JsonNode en une instance de TaskModel de manière réactive.
-     * @param json le JsonNode à convertir
-     * @return un Mono contenant l'objet TaskModel, ou une erreur en cas de problème de conversion
-     */
-    public static Mono<TaskModel> fromJson(JsonNode json) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            TaskModel task = mapper.treeToValue(json, TaskModel.class);
-            return Mono.just(task);
-        } catch (Exception e) {
-            return Mono.error(new RuntimeException("Erreur de conversion JSON en TaskModel", e));
-        }
+    // Add default constructor for Jackson deserialization
+    public TaskModel() {
     }
+
+    
 }

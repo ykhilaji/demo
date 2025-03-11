@@ -2,7 +2,7 @@ package com.shipping.demo.realTime.Task.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shipping.demo.ServiceShippingDemoApplication;
-import com.shipping.demo.realTime.task.mapper.EtiquetteModelAdapter;
+import com.shipping.demo.realTime.task.dto.EtiquetteModelAdapter;
 import com.shipping.demo.realTime.task.repository.TaskRepository;
 
 import org.junit.jupiter.api.Test;

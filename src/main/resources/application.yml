@@ -23,13 +23,13 @@ pekko:
     artery:
       canonical:
         hostname: "127.0.0.1"  # Changed from "localhost" to "127.0.0.1"
-        port: 2551
+        port: 2562  # Changed from 2552 to 2562 to avoid port conflict
   cluster:
     name: "ClusterSystem"
     seed-nodes:
-      - pekko://ClusterSystem@127.0.0.1:2551
-      - pekko://ClusterSystem@127.0.0.1:2552
-      - pekko://ClusterSystem@127.0.0.1:2553
+      - pekko://ClusterSystem@127.0.0.1:2562  # Updated port to match the new port
+      - pekko://ClusterSystem@127.0.0.1:2563  # Updated port to avoid conflicts
+      - pekko://ClusterSystem@127.0.0.1:2564  # Updated port to avoid conflicts
     downing-provider-class: "org.apache.pekko.cluster.sbr.SplitBrainResolverProvider"
 
 server:

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-import com.shipping.demo.realTime.task.model.TaskModel;
+import com.shipping.demo.realTime.task.entity.TaskModel;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

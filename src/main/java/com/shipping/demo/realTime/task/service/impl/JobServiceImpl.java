@@ -18,8 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.shipping.demo.realTime.task.model.TaskInfra;
-import com.shipping.demo.realTime.task.model.TaskModel;
+import com.shipping.demo.realTime.task.actor.PageActor.TaskComplete;
+import com.shipping.demo.realTime.task.entity.TaskInfra;
+import com.shipping.demo.realTime.task.entity.TaskModel;
 import com.shipping.demo.realTime.task.repository.TaskRepository;
 import com.shipping.demo.realTime.task.service.JobService;
 
@@ -93,8 +94,7 @@ public class JobServiceImpl implements JobService {
     public void onTask(TaskInfra task) {
         // Construction du topic et envoi du message Publish contenant TaskComplete
         String topic = "jobs:" + task.getSid();
-       // TaskComplete taskComplete = new TaskComplete(task);
-        rateLimiter.tell(new Publish(topic, task), ActorRef.noSender());
+        rateLimiter.tell(new Publish(topic, new TaskComplete(task)), ActorRef.noSender());
     }
 
     @Override

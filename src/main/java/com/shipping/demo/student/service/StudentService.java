@@ -34,9 +34,9 @@ public class StudentService {
   public Mono<Student> save(StudentDto request) {
     return studentRepository.save(
         Student.builder()
-            .firstname(request.getFirstName())
-            .lastname(request.getLastName())
-            .age(request.getAge())
+            .firstname(request.firstName())
+            .lastname(request.lastName())
+            .age(request.age())
             .build()
     );
   }

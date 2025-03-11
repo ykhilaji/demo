@@ -1,8 +1,10 @@
 package com.shipping.demo.realTime.task.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.shipping.demo.realTime.task.model.TaskInfra;
-import com.shipping.demo.realTime.task.model.TaskModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shipping.demo.realTime.task.converter.JacksonConfig;
+import com.shipping.demo.realTime.task.entity.TaskInfra;
+import com.shipping.demo.realTime.task.entity.TaskModel;
 import com.shipping.demo.realTime.task.service.JobService;
 import com.shipping.demo.realTime.task.utils.Mock;
 
@@ -19,48 +21,51 @@ public class JobController {
 
    private final Mock mock;
    private final JobService jobService;
+   private final JacksonConfig objectMapper;
 
-   public JobController(Mock mock, JobService jobService) {
-    this.mock = mock;
-    this.jobService = jobService;
-}
+   public JobController(Mock mock, JobService jobService, JacksonConfig objectMapper) {
+       this.mock = mock;
+       this.jobService = jobService;
+       this.objectMapper = objectMapper;
+   }
 
-@GetMapping("/{sid}/{tasks}")
-public Mono<ResponseEntity<Void>> job(@PathVariable String sid, @PathVariable int tasks) {
-    return Flux.range(1, tasks)
-        .<Void>flatMap(i ->
-            Mono.delay(Duration.ofMillis(500))
-                .then(Mono.fromFuture(mock.loadJson("tasks.json")))
-                .flatMap(data -> {
-                    // On suppose que TaskModel.fromJson retourne un Mono<TaskModel>
-                    Mono<TaskModel> taskModelMono = TaskModel.fromJson(data);
-                    return taskModelMono.flatMap((TaskModel task) -> {
-                        // Crée un objet TaskInfra à partir des données
-                        TaskInfra taskInfra = new TaskInfra(
-                            sid,
-                            "task " + i + " complet",
-                            convertToJson(sid),
-                            task
-                        );
-                        // Encapsule l'appel dans un Mono explicite de type Void
-                        return Mono.<Void>fromRunnable(() -> jobService.onTask(taskInfra));
-                    }).switchIfEmpty(
-                        Mono.fromRunnable(() ->
-                            System.err.println("Erreur de conversion JSON pour task " + i)
-                        )
-                    );
-                })
-        )
-        .then(Mono.just(ResponseEntity.noContent().build()));
-}
+   @PostMapping("/{sid}/{tasks}")
+   public Mono<ResponseEntity<Void>> job(@PathVariable String sid, @PathVariable int tasks) {
+       return Flux.range(1, tasks)
+           .<Void>flatMap(i ->
+               Mono.delay(Duration.ofMillis(500))
+                   .then(Mono.fromFuture(mock.loadJson("tasks.json")))
+                   .flatMap((JsonNode data) -> {
+                      Mono<JsonNode> taskMono = Mono.just(data);
+                       Mono<TaskModel> taskModelMono = fromJson(data);
+                       return taskModelMono.flatMap((TaskModel task) -> {
+                           TaskInfra taskInfra = new TaskInfra(
+                               sid,
+                               "task " + i + " complet",
+                               convertToJson(sid),
+                               task
+                           );
+                           return Mono.<Void>fromRunnable(() -> jobService.onTask(taskInfra));
+                       }).switchIfEmpty(
+                           Mono.fromRunnable(() ->
+                               System.err.println("Erreur de conversion JSON pour task " + i)
+                           )
+                       );
+                   })
+           )
+           .then(Mono.just(ResponseEntity.noContent().build()));
+   }
 
+   private JsonNode convertToJson(String value) {
+       return objectMapper.objectMapper().getNodeFactory().textNode(value);
+   }
 
-
-
-
-    // Méthode utilitaire pour convertir une String en JsonNode
-    private JsonNode convertToJson(String value) {
-        return com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.textNode(value);
+   public  Mono<TaskModel> fromJson(JsonNode json) {
+    try {
+        TaskModel task = objectMapper.objectMapper().treeToValue(json, TaskModel.class);
+        return Mono.just(task);
+    } catch (Exception e) {
+        return Mono.error(new RuntimeException("Erreur de conversion JSON en TaskModel", e));
     }
-    
+}
 }
