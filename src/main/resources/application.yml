@@ -11,6 +11,9 @@ spring:
     user: postgres
     password: postgres
     repair-on-migrate: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    enabled: true
   
 pekko:
   name: "demo"
@@ -28,8 +31,8 @@ pekko:
     name: "ClusterSystem"
     seed-nodes:
       - pekko://ClusterSystem@127.0.0.1:2562  # Updated port to match the new port
-      - pekko://ClusterSystem@127.0.0.1:2563  # Updated port to avoid conflicts
-      - pekko://ClusterSystem@127.0.0.1:2564  # Updated port to avoid conflicts
+      #- pekko://ClusterSystem@127.0.0.1:2563  # Updated port to avoid conflicts
+      #- pekko://ClusterSystem@127.0.0.1:2564  # Updated port to avoid conflicts
     downing-provider-class: "org.apache.pekko.cluster.sbr.SplitBrainResolverProvider"
 
 server:

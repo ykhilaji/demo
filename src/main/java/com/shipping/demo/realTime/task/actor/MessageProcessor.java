@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.pekko.actor.typed.ActorRef;
 
+
 public class MessageProcessor implements SingletonBehavior<MessageProcessor.Command> {
 
+    @Autowired
     private JacksonConfig jacksonConfig;
 
     public void setJacksonConfig(JacksonConfig jacksonConfig) {
